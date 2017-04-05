@@ -3,9 +3,8 @@ package com.fremework.bingo.bingorxretrofitfremework.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import com.fremework.bingo.bingorxretrofitfremework.Utils.BingoConfigs;
+
+import com.fremework.bingo.bingorxretrofitfremework.Utils.DevConfig;
 import com.fremework.bingo.bingorxretrofitfremework.Utils.BingoLog;
 import com.fremework.bingo.bingorxretrofitfremework.Utils.OutputLocalLog;
 import com.google.gson.Gson;
@@ -72,12 +71,8 @@ public class BingoBasicActivity extends AppCompatActivity{
     }
 
     private void showLifeCycle(String lifecycleStage) {
-        if (BingoConfigs.SHOW_LIFE_CYCLE) {
-            BingoLog.v(TAG, String.format("----%s:", lifecycleStage), getClass().getSimpleName());
+        if (DevConfig.SHOW_LIFE_CYCLE) {
+            BingoLog.v(TAG, String.format("--%s:", lifecycleStage), getClass().getSimpleName());
         }
     }
-
-
-
-
 }

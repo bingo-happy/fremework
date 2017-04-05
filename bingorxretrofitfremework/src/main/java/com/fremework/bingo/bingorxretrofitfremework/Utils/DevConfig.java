@@ -4,7 +4,7 @@ package com.fremework.bingo.bingorxretrofitfremework.Utils;
  * Created by bingo on 2017/3/28.
  */
 
-public class BingoConfigs {
+public class DevConfig {
 
     /**
      * Log 开关

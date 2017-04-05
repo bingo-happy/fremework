@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyFremework.iml" filepath="$PROJECT_DIR$/MyFremework.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bingorxretrofitfremework/bingorxretrofitfremework.iml" filepath="$PROJECT_DIR$/bingorxretrofitfremework/bingorxretrofitfremework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fremework.iml" filepath="$PROJECT_DIR$/fremework.iml" />
     </modules>
   </component>
 </project>

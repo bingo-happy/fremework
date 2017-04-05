@@ -7,7 +7,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.util.Date;
 
 import de.mindpipe.android.logging.log4j.LogConfigurator;
 
@@ -22,14 +21,14 @@ public class OutputLocalLog {
     private Logger logger;
 
     public void print(String msg){
-        if(BingoConfigs.PRINT_LOG) {
+        if(DevConfig.PRINT_LOG) {
             logger.debug(msg);
         }
     }
 
     public OutputLocalLog(Context context) {
         this.mContext = context;
-        if(BingoConfigs.PRINT_LOG) {
+        if(DevConfig.PRINT_LOG) {
             final LogConfigurator logConfigurator = new LogConfigurator();
             String fileName = Environment.getExternalStorageDirectory()
                     + File.separator + LOG_NAME;//设置文件名
@@ -73,24 +72,18 @@ public class OutputLocalLog {
         private Context mContext;
         private Logger gLogger;
 
-        /**
-         * 保证只有一个CrashHandler实例
-         */
+        //保证只有一个CrashHandler实例
+
         private CrashHandler() {
         }
 
-        /**
-         * 获取CrashHandler实例 ,单例模式
-         */
+        // 获取CrashHandler实例 ,单例模式
         public static CrashHandler getInstance() {
             if (instance == null)
                 instance = new CrashHandler();
             return instance;
         }
-
-        /**
-         * 初始化
-         */
+        //初始化
         public void init(Context context, Logger logger) {
             mContext = context;
             gLogger = logger;
@@ -99,10 +92,7 @@ public class OutputLocalLog {
             //设置该CrashHandler为程序的默认处理器
             Thread.setDefaultUncaughtExceptionHandler(this);
         }
-
-        /**
-         * 当UncaughtException发生时会转入该函数来处理
-         */
+        //当UncaughtException发生时会转入该函数来处理
         @Override
         public void uncaughtException(Thread thread, Throwable ex) {
             if (mDefaultHandler != null) {
@@ -115,7 +105,6 @@ public class OutputLocalLog {
             }
         }
     }
-
 }
 
 

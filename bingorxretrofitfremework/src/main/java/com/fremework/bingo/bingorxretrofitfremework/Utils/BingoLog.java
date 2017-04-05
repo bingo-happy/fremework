@@ -20,7 +20,7 @@ public class BingoLog {
 
     public static void v(String tag, Object... messages) {
         // Only log VERBOSE if build type is DEBUG
-        if (BingoConfigs.SHOW_LOG) {
+        if (DevConfig.SHOW_LOG) {
             log(tag, Log.VERBOSE, null, messages);
         }
     }
@@ -28,7 +28,7 @@ public class BingoLog {
 
     public static void d(String tag, Object... messages) {
         // Only log DEBUG if build type is DEBUG
-        if (BingoConfigs.SHOW_LOG) {
+        if (DevConfig.SHOW_LOG) {
             log(tag, Log.DEBUG, null, messages);
         }
     }
@@ -50,7 +50,7 @@ public class BingoLog {
     }
 
     public static void i(String tag, Object... messages) {
-        if (BingoConfigs.SHOW_LOG) {
+        if (DevConfig.SHOW_LOG) {
             log(tag, Log.INFO, null, messages);
         }
     }
