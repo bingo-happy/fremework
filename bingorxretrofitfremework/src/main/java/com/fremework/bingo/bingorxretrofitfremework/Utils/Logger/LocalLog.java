@@ -1,7 +1,9 @@
-package com.fremework.bingo.bingorxretrofitfremework.Utils;
+package com.fremework.bingo.bingorxretrofitfremework.Utils.Logger;
 
-import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
+
+import com.fremework.bingo.bingorxretrofitfremework.Utils.Logger.BingoLog.InterfaceBingoLog;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -14,29 +16,24 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
  * Created by bingo on 2017/3/28.
  */
 
-public class OutputLocalLog {
+public class LocalLog implements InterfaceBingoLog {
 
     private final String LOG_NAME = "/bingo/local.log";
-    private Context mContext;
     private Logger logger;
+    private static CrashHandler catchHandler;
+    private static LogConfigurator logConfigurator;
 
-    public void print(String msg){
-        if(DevConfig.PRINT_LOG) {
-            logger.debug(msg);
-        }
-    }
-
-    public OutputLocalLog(Context context) {
-        this.mContext = context;
-        if(DevConfig.PRINT_LOG) {
-            final LogConfigurator logConfigurator = new LogConfigurator();
+    @Override
+    public void log(String Tag, int level, Object... msg) {
+        if(logConfigurator==null){
+            logConfigurator = new LogConfigurator();
             String fileName = Environment.getExternalStorageDirectory()
                     + File.separator + LOG_NAME;//设置文件名
             logConfigurator.setFileName(fileName);
             //设置root日志输出级别 默认为DEBUG
             logConfigurator.setRootLevel(Level.DEBUG);
             // 设置日志输出级别
-            logConfigurator.setLevel("org.apache", Level.INFO);
+            logConfigurator.setLevel("org.apache", Level.ERROR);
             //设置 输出到日志文件的文字格式 默认 %d %-5p [%c{2}]-[%L] %m%n
             logConfigurator.setFilePattern("%d %-5p [%c{2}]-[%L] %m%n");
             //设置输出到控制台的文字格式 默认%m%n
@@ -56,10 +53,28 @@ public class OutputLocalLog {
             //是否显示内部初始化日志,默认为false
             logConfigurator.setInternalDebugging(false);
             logConfigurator.configure();
-            logger = Logger.getLogger(context.getClass());
-            CrashHandler catchHandler = CrashHandler.getInstance();
-            catchHandler.init(context, logger);
+            logger = Logger.getLogger(Tag);
         }
+        if (catchHandler == null) {
+            catchHandler = CrashHandler.getInstance();
+            catchHandler.init(logger);
+        }
+        String message;
+        if (msg != null && msg.length == 1) {
+            if(msg[0].getClass().isInstance(Throwable.class))
+                message = Log.getStackTraceString((Throwable)msg[0]);
+            else message = msg[0].toString();
+        } else {
+            StringBuilder sb = new StringBuilder();
+            if (msg != null) for (Object m : msg) {
+                if(m.getClass().isInstance(Throwable.class))
+                    sb.append("\n").append(Log.getStackTraceString((Throwable)m));
+                else sb.append(m);
+            }
+            message = sb.toString();
+        }
+        logger.error(message);
+
     }
 
     public static class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -68,8 +83,6 @@ public class OutputLocalLog {
         private Thread.UncaughtExceptionHandler mDefaultHandler;
         //CrashHandler实例
         private static CrashHandler instance;
-        //程序的Context对象
-        private Context mContext;
         private Logger gLogger;
 
         //保证只有一个CrashHandler实例
@@ -83,20 +96,21 @@ public class OutputLocalLog {
                 instance = new CrashHandler();
             return instance;
         }
+
         //初始化
-        public void init(Context context, Logger logger) {
-            mContext = context;
+        public void init(Logger logger) {
             gLogger = logger;
-            //获取系统默认的UncaughtException处理器
-            mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
             //设置该CrashHandler为程序的默认处理器
             Thread.setDefaultUncaughtExceptionHandler(this);
+            //获取系统默认的UncaughtException处理器
+            mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         }
+
         //当UncaughtException发生时会转入该函数来处理
         @Override
         public void uncaughtException(Thread thread, Throwable ex) {
             if (mDefaultHandler != null) {
-                gLogger.debug("UncaughtException-----:" + ex.getMessage());
+                gLogger.debug("UncaughtException--:" + ex.getMessage());
                 //退出程序
                 android.os.Process.killProcess(android.os.Process.myPid());
                 System.exit(1);

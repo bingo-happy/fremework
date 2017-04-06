@@ -5,10 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.fremework.bingo.bingorxretrofitfremework.Utils.DevConfig;
-import com.fremework.bingo.bingorxretrofitfremework.Utils.BingoLog;
-import com.fremework.bingo.bingorxretrofitfremework.Utils.OutputLocalLog;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fremework.bingo.bingorxretrofitfremework.Utils.Logger.BingoLog.BingoLog;
 
 /**
  * Created by bingo on 2017/3/28.
@@ -16,13 +13,12 @@ import com.google.gson.GsonBuilder;
 
 public class BingoBasicActivity extends AppCompatActivity{
 
-    private static String defaultStringFormat = "yyyy-MM-dd HH:mm:ss";
     protected String TAG = BingoLog.makeLogTag(getClass().getSimpleName());
-    protected final OutputLocalLog outputLocalLog = new OutputLocalLog(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BingoLog.newInstance();
         showLifeCycle("onCreate");
     }
 
@@ -50,25 +46,6 @@ public class BingoBasicActivity extends AppCompatActivity{
         showLifeCycle("onDestroy");
     }
 
-    protected Gson getGson() {
-        return new GsonBuilder().setDateFormat(defaultStringFormat).create();
-    }
-
-    protected Gson getGson(String dateFormat) {
-        return new GsonBuilder().setDateFormat(dateFormat).create();
-    }
-
-    protected void outputLog(String msg){
-        outputLocalLog.print(msg);
-    }
-
-    protected void debugLog(String msg){
-        BingoLog.v(TAG, String.format("--%s:", msg), getClass().getSimpleName());
-    }
-
-    protected void warningLog(String msg){
-        BingoLog.v(TAG, String.format("--%s:", msg), getClass().getSimpleName());
-    }
 
     private void showLifeCycle(String lifecycleStage) {
         if (DevConfig.SHOW_LIFE_CYCLE) {

@@ -1,9 +1,10 @@
 package com.fremework.bingo.myfremework;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.fremework.bingo.bingorxretrofitfremework.Activity.BingoBasicActivity;
+
+public class MainActivity extends BingoBasicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
